@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PURI ELECTRONICS HUB</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#f5f7fa;
+color:#333;
+}
+
+header{
+background:#0a4b78;
+color:white;
+text-align:center;
+padding:20px;
+}
+
+header h1{
+font-size:26px;
+}
+
+header p{
+font-size:14px;
+opacity:0.9;
+}
+
+.location{
+font-size:13px;
+margin-top:4px;
+}
+
+.container{
+padding:15px;
+max-width:1200px;
+margin:auto;
+}
+
+.filters{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin-bottom:15px;
+}
+
+.filters button{
+border:none;
+background:#e2e6ea;
+padding:8px 12px;
+border-radius:20px;
+cursor:pointer;
+font-size:13px;
+}
+
+.filters button.active{
+background:#0a4b78;
+color:white;
+}
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:15px;
+}
+
+.product{
+background:white;
+border-radius:10px;
+padding:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
+text-align:center;
+}
+
+.product img{
+width:100%;
+height:130px;
+object-fit:cover;
+border-radius:6px;
+}
+
+.product h4{
+font-size:15px;
+margin:8px 0 4px;
+}
+
+.price{
+color:#0a4b78;
+font-weight:600;
+}
+
+.desc{
+font-size:12px;
+color:#666;
+margin-bottom:8px;
+}
+
+.product button{
+background:#28a745;
+color:white;
+border:none;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.cart-btn{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#ff6a00;
+color:white;
+border:none;
+padding:14px;
+border-radius:50%;
+font-size:20px;
+cursor:pointer;
+}
+
+.cart-count{
+position:absolute;
+top:-5px;
+right:-5px;
+background:red;
+color:white;
+font-size:12px;
+padding:3px 6px;
+border-radius:50%;
+}
+
+.cart-modal{
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,0.6);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.cart-box{
+background:white;
+width:90%;
+max-width:400px;
+max-height:80%;
+overflow:auto;
+border-radius:10px;
+padding:15px;
+}
+
+.cart-item{
+display:flex;
+justify-content:space-between;
+margin:8px 0;
+font-size:14px;
+}
+
+.qty button{
+padding:2px 6px;
+}
+
+.total{
+font-weight:bold;
+margin-top:10px;
+}
+
+.checkout-btn{
+margin-top:10px;
+background:#0a4b78;
+color:white;
+border:none;
+padding:10px;
+width:100%;
+border-radius:6px;
+}
+
+.whatsapp{
+position:fixed;
+bottom:20px;
+left:20px;
+background:#25D366;
+color:white;
+padding:12px 14px;
+border-radius:30px;
+text-decoration:none;
+font-size:14px;
+}
+
+form{
+margin-top:15px;
+}
+
+form input, form textarea{
+width:100%;
+margin:5px 0;
+padding:8px;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+form button{
+background:#28a745;
+color:white;
+border:none;
+padding:10px;
+width:100%;
+border-radius:6px;
+margin-top:5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>PURI ELECTRONICS HUB</h1>
+<p>HONESTY IS THE BEST POLICY</p>
+<div class="location">Near Bus Stand Bageana Punjab</div>
+</header>
+
+<div class="container">
+
+<div class="filters">
+<button onclick="filterProducts('All')" class="active">All</button>
+<button onclick="filterProducts('Mobile')">Mobiles</button>
+<button onclick="filterProducts('AC')">AC</button>
+<button onclick="filterProducts('Refrigerator')">Fridge</button>
+<button onclick="filterProducts('Cooler')">Cooler</button>
+<button onclick="filterProducts('Inverter')">Inverter</button>
+<button onclick="filterProducts('Accessories')">Accessories</button>
+</div>
+
+<div class="products" id="products"></div>
+
+</div>
+
+<button class="cart-btn" onclick="toggleCart()">
+🛒
+<span class="cart-count" id="cartCount">0</span>
+</button>
+
+<div class="cart-modal" id="cartModal">
+<div class="cart-box">
+
+<h3>Your Cart</h3>
+
+<div id="cartItems"></div>
+
+<div class="total" id="cartTotal"></div>
+
+<button class="checkout-btn" onclick="showCheckout()">Place Order</button>
+
+<div id="checkout"></div>
+
+</div>
+</div>
+
+<a class="whatsapp" href="https://wa.me/91887213097" target="_blank">
+Chat on WhatsApp
+</a>
+
+<script>
+
+const products=[
+{
+name:"Samsung LCD 32 Inch",
+price:8000,
+category:"Accessories",
+img:"https://i.ibb.co/Ld5Pz94S/81-Pc-W0-Xtwn-L-AC-UF1000-1000-QL80.jpg",
+desc:"HD LED TV perfect for home"
+},
+
+{
+name:"Samsung LCD 46 Inch",
+price:12500,
+category:"Accessories",
+img:"https://i.ibb.co/XxBL5x4B/2-2.png",
+desc:"Large screen smart TV"
+},
+
+{
+name:"Industrial Air Cooler",
+price:9500,
+category:"Cooler",
+img:"https://i.ibb.co/FLYhPYMc/industrial-air-cooler-500x500.jpg",
+desc:"Powerful cooler for large rooms"
+},
+
+{
+name:"Whirlpool Refrigerator",
+price:14500,
+category:"Refrigerator",
+img:"https://i.ibb.co/m52HgfH2/WHPOOL-73213-7-600x600.png",
+desc:"Energy efficient fridge"
+},
+
+{
+name:"Solar AC System",
+price:35000,
+category:"AC",
+img:"https://i.ibb.co/LdgrXvRX/can-solar-run-ac.jpg",
+desc:"Runs on solar energy"
+},
+
+{
+name:"Smart Android Mobile",
+price:12000,
+category:"Mobile",
+img:"https://i.ibb.co/s9cnr8HY/untitled-design-59-66e410cc229bf.jpg",
+desc:"Latest Android smartphone"
+},
+
+{
+name:"Mobile Charger",
+price:450,
+category:"Accessories",
+img:"https://i.ibb.co/gFRRk7VL/IMG-20260312-WA0003.jpg",
+desc:"Fast charging adapter"
+},
+
+{
+name:"Inverter System",
+price:9500,
+category:"Inverter",
+img:"https://i.ibb.co/LdgrXvRX/can-solar-run-ac.jpg",
+desc:"Backup power inverter"
+}
+
+];
+
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+
+function saveCart(){
+localStorage.setItem("cart",JSON.stringify(cart));
+updateCart();
+}
+
+function addToCart(i){
+let p=products[i];
+let found=cart.find(x=>x.name==p.name);
+
+if(found){
+found.qty++;
+}else{
+cart.push({...p,qty:1});
+}
+
+saveCart();
+}
+
+function updateCart(){
+
+document.getElementById("cartCount").innerText=
+cart.reduce((a,b)=>a+b.qty,0);
+
+let items="";
+let total=0;
+
+cart.forEach((c,i)=>{
+
+let sub=c.price*c.qty;
+total+=sub;
+
+items+=`
+<div class="cart-item">
+<div>${c.name}</div>
+
+<div class="qty">
+<button onclick="changeQty(${i},-1)">-</button>
+${c.qty}
+<button onclick="changeQty(${i},1)">+</button>
+</div>
+
+<div>₹${sub}</div>
+
+<button onclick="removeItem(${i})">x</button>
+</div>
+`;
+
+});
+
+document.getElementById("cartItems").innerHTML=items;
+document.getElementById("cartTotal").innerText="Total: ₹"+total;
+
+}
+
+function changeQty(i,v){
+cart[i].qty+=v;
+if(cart[i].qty<=0)cart.splice(i,1);
+saveCart();
+}
+
+function removeItem(i){
+cart.splice(i,1);
+saveCart();
+}
+
+function toggleCart(){
+let m=document.getElementById("cartModal");
+m.style.display=m.style.display=="flex"?"none":"flex";
+}
+
+function filterProducts(cat){
+
+document.querySelectorAll(".filters button")
+.forEach(b=>b.classList.remove("active"));
+
+event.target.classList.add("active");
+
+displayProducts(cat);
+
+}
+
+function displayProducts(cat){
+
+let html="";
+
+products.forEach((p,i)=>{
+
+if(cat!="All" && p.category!=cat)return;
+
+html+=`
+<div class="product">
+
+<img src="${p.img}" loading="lazy">
+
+<h4>${p.name}</h4>
+
+<div class="price">₹${p.price}</div>
+
+<div class="desc">${p.desc}</div>
+
+<button onclick="addToCart(${i})">Add to Cart</button>
+
+</div>
+`;
+
+});
+
+document.getElementById("products").innerHTML=html;
+
+}
+
+function showCheckout(){
+
+let summary="";
+
+let total=0;
+
+cart.forEach(c=>{
+summary+=`${c.name} x ${c.qty} = ₹${c.price*c.qty}\n`;
+total+=c.price*c.qty;
+});
+
+summary+=`\nTotal: ₹${total}`;
+
+document.getElementById("checkout").innerHTML=`
+
+<form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+
+<input name="Customer Name" placeholder="Your Name" required>
+
+<input name="Phone" placeholder="Phone Number" required>
+
+<textarea name="Address" placeholder="Delivery Address" required></textarea>
+
+<textarea name="Instructions" placeholder="Special Instructions"></textarea>
+
+<input type="hidden" name="Order Summary" value="${summary}">
+
+<button type="submit">Submit Order</button>
+
+</form>
+
+`;
+
+}
+
+displayProducts("All");
+updateCart();
+
+</script>
+
+</body>
+</html>
